@@ -34,8 +34,8 @@ struct MediaMetadata {
 
 fn create_media_router() -> Router {
     Router::new()
-        .route("/", post(post_media))
-        //.route("/media/{id}", get(get_media_by_id));
+        .route("/", get(get_media()).post(post_media))
+        .route("/{id}", get(get_media_by_id))
 
 }
 

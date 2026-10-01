@@ -1,6 +1,7 @@
 mod api;
 mod application;
 mod infrastructure;
+mod domain;
 use api::main_router::create_main_router;
 use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;

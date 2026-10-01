@@ -7,8 +7,3 @@ pub enum UploadStatus {
     Finished,
     Failed,
 }
-
-pub struct Pagination {
-    pub page: u16,
-    pub step: u16,
-}

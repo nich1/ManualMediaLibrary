@@ -1,5 +1,6 @@
 use crate::api::media::models::{MediaMetaData, PostMediaMetadata};
 use crate::application::models::Pagination;
+use crate::domain::media::metadata::{MediaTitle, ValidationError};
 use crate::infrastructure::media::repository::{
     create_media_metadata, delete_media_metadata, get_media_metadata, get_media_metadata_by_id,
 };
@@ -72,14 +73,15 @@ pub async fn post_media(
     State(pool): State<PgPool>,
     Form(params): Form<PostMediaMetadata>,
 ) -> Result<(StatusCode, Json<MediaMetaData>), (StatusCode, &'static str)> {
-    // TODO: Implement domain section for logic like this
-    if params.title.trim().is_empty() {
-        return Err((StatusCode::BAD_REQUEST, "Title must not be empty"));
-    }
+    let title = MediaTitle::new(params.title).map_err(|err| match err {
+        ValidationError::EmptyTitle => {
+            (StatusCode::BAD_REQUEST, "Title must not be empty")
+        }
+    })?;
 
     let row = create_media_metadata(
         &pool,
-        params.title.clone(),
+        title.into_inner(),
         params.filename.clone(),
         params.mime_type.clone(),
         params.duration_ms,

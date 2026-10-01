@@ -1,9 +1,11 @@
+use crate::application::media::media_handler::{
+    delete_media, get_media, get_media_by_id, post_media,
+};
 use axum::{Router, routing::get};
-use crate::application::media::media_handler::{get_media, post_media, get_media_by_id};
+use sqlx::PgPool;
 
-pub fn create_media_router() -> Router {
+pub fn create_media_router() -> Router<PgPool> {
     Router::new()
         .route("/", get(get_media).post(post_media))
-        .route("/{id}", get(get_media_by_id))
-
+        .route("/{id}", get(get_media_by_id).delete(delete_media))
 }

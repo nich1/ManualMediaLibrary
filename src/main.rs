@@ -13,8 +13,12 @@ async fn main() {
     dotenv().ok();
 
     let url = env::var("DB_URL").expect("DB_URL must be set");
+    let pool_size: u32 = env::var("POOL_SIZE")
+        .unwrap_or_else(|_| "5".to_string())
+        .parse()
+        .expect("POOL_SIZE must be a valid u16");
     let pool = PgPoolOptions::new()
-        .max_connections(5) //TODO: Make configurable
+        .max_connections(pool_size)
         .connect(&url)
         .await
         .expect("Failed to create pool.");

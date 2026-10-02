@@ -1,4 +1,4 @@
-use crate::application::media::media_handler::{
+use crate::application::media::service::{
     delete_media, get_media, get_media_by_id, post_media,
 };
 use axum::{Router, routing::get};
